@@ -1,0 +1,44 @@
+<h4>Basket</h4>
+<div id="card">
+  {{#if notebooks.length}}
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Price(1sht)</th>
+          <th>Quantity</th>
+          <th>Increment</th>
+          <th>Decrement</th>
+          <th>Delete</th>
+        </tr>
+      </thead>
+      <tbody>
+        {{#each notebooks}}
+          <tr>
+            <td>{{title}}</td>
+            <td>{{price}}</td>
+            <td>{{count}}</td>
+            <td>
+              <button class="btn btn-small js-inc" data-id="{{id}}">
+                Increment
+              </button>
+            </td>
+            <td>
+              <button class="btn btn-small js-dec" data-id="{{id}}">
+                Decrement
+              </button>
+            </td>
+            <td>
+              <button class="btn btn-small js-remove" data-id="{{id}}">
+                Delete
+              </button>
+            </td>
+          </tr>
+        {{/each}}
+      </tbody>
+    </table>
+    <h5><b>Total Cost: </b><span class="price">{{price}}</span></h5>
+  {{else}}
+    <p>Basket is empty</p>
+  {{/if}}
+</div>

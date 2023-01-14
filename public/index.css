@@ -26,9 +26,17 @@
   align-items: center;
 }
 .notebook img {
-  max-width: 600px;
+  max-width: 800px;
   height: auto;
 }
-.notebook .price.big{
+.notebook .price.big {
   font-size: 2.5rem;
+}
+.card-action.actions {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.card-action form {
+  margin: 0;
 }
