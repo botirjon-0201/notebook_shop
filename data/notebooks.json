@@ -1,0 +1,16 @@
+[
+  {
+    "title": "Macbook pro",
+    "price": "1500",
+    "img": "https://www.apple.com/v/macbook-pro-14-and-16/c/images/overview/hero/hero_intro_endframe__e6khcva4hkeq_large.jpg",
+    "descr": "The M1 also gives the MacBook Air something it’s never had before: decent gaming performance. Apple's SOC offers up to 8 GPU cores",
+    "id": "8c8dc675-2077-4999-8425-bfa29984999f"
+  },
+  {
+    "title": "Macbook",
+    "price": "1100",
+    "img": "https://media.cnn.com/api/v1/images/stellar/prod/220715122428-macbook-air-m2-review-9.jpg?c=16x9&q=h_270,w_480,c_fill",
+    "descr": "M1 Max is the most powerful chip ever created for a pro notebook, with 10 CPU cores, up to 32 GPU cores, and a 16-core Neural Engine.",
+    "id": "da8a5762-a0c2-40c1-a266-c44df832e237"
+  }
+]

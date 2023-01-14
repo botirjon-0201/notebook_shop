@@ -1,1 +1,23 @@
 <h1>Hello from Notebook</h1>
+
+{{#if notebooks.length}}
+  <div class="content_notebooks">
+    {{#each notebooks}}
+      <div class="card">
+        <div class="card-image">
+          <img src={{img}} title={{title}} />
+        </div>
+        <div class="card-content">
+          <span class="card-title">{{title}}</span>
+          <p>{{descr}}</p>
+          <strong class="price">{{price}}</strong>
+        </div>
+        <div class="card-action">
+          <a href="/notebooks/{{id}}" target="_blank">Notebooks Details</a>
+        </div>
+      </div>
+    {{/each}}
+  </div>
+{{else}}
+  <b>Notebooks empty</b>
+{{/if}}

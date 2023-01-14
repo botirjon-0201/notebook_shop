@@ -1,1 +1,37 @@
-<h1>Hello from Add</h1>
+<h4>Add a new Notebook</h4>
+
+<form action="/add" method="POST" class="z-depth-4 f_control">
+  <div class="input-field">
+    <input id="title" name="title" type="text" class="validate" required />
+    <label for="title">Notebooks Model</label>
+    <span class="helper-text" data-error="Enter Noteboooks Name"></span>
+  </div>
+  <div class="input-field">
+    <input
+      id="price"
+      name="price"
+      type="number"
+      class="validate"
+      min="1"
+      required
+    />
+    <label for="price">Price</label>
+    <span class="helper-text" data-error="Enter Price"></span>
+  </div>
+  <div class="input-field">
+    <input id="img" name="img" type="text" class="validate" required />
+    <label for="img">URL Image</label>
+    <span class="helper-text" data-error="Enter URL Img"></span>
+  </div>
+  <div class="input-field">
+    <textarea
+      id="descr"
+      name="descr"
+      class="materialize-textarea validate"
+      required
+    ></textarea>
+    <label for="descr">Description</label>
+    <span class="helper-text" data-error="Enter Description"></span>
+  </div>
+  <button class="btn btn-primary">Add Notebook</button>
+</form>
