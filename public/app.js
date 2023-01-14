@@ -1,8 +1,8 @@
 const priceNotebook = document.querySelectorAll(".price");
 
 priceNotebook.forEach((item) => {
-  item.textContent = new Intl.NumberFormat("uz-UZ", {
-    currency: "uzb",
+  item.textContent = new Intl.NumberFormat("us-US", {
+    currency: "usd",
     style: "currency",
   }).format(item.textContent);
 });
