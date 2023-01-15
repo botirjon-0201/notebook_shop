@@ -53,3 +53,7 @@
   <input type="hidden" name="id" value="{{notebook.id}}" />
   <button class="btn btn-primary">Edit Notebook</button>
 </form>
+<form action="/notebooks/remove" method="POST">
+  <input type="hidden" name="id" value="{{notebook.id}}" />
+  <button class="btn red">Remove Notebook</button>
+</form>

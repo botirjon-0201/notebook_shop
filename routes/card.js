@@ -9,7 +9,7 @@ router.post("/add", async (req, res) => {
   res.redirect("/card");
 });
 
-router.delete("/inc/:id", async (req, res) => {
+router.post("/inc/:id", async (req, res) => {
   const card = await Card.increment(req.params.id);
   res.status(200).send(card);
 });

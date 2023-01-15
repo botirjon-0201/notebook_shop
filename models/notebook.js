@@ -1,84 +1,26 @@
-const fs = require("fs");
-const path = require("path");
-const { v4: uuidv4 } = require("uuid");
+const { Schema, model } = require("mongoose");
 
-class Notebook {
-  constructor(title, price, img, descr) {
-    (this.title = title),
-      (this.price = price),
-      (this.img = img),
-      (this.descr = descr),
-      (this.id = uuidv4());
-  }
+const notebook = new Schema({
+  title: {
+    type: String,
+    required: true,
+  },
+  price: {
+    type: Number,
+    required: true,
+  },
+  img: {
+    type: String,
+    required: true,
+  },
+  descr: {
+    type: String,
+    required: true,
+  },
+  userId: {
+    type: Schema.Types.ObjectId,
+    ref: "User",
+  },
+});
 
-  toJSON() {
-    return {
-      title: this.title,
-      price: this.price,
-      img: this.img,
-      descr: this.descr,
-      id: this.id,
-    };
-  }
-
-  static async update(notebook) {
-    const notebooks = await Notebook.getAll();
-    const idx = notebooks.findIndex((item) => item.id === notebook.id);
-    notebooks[idx] = notebook;
-
-    return new Promise((resolve, reject) => {
-      fs.writeFile(
-        path.join(__dirname, "..", "data", "notebooks.json"),
-        JSON.stringify(notebooks),
-        (err) => {
-          if (err) {
-            reject(err);
-          } else {
-            resolve();
-          }
-        }
-      );
-    });
-  }
-
-  async save() {
-    const notebooks = await Notebook.getAll();
-    notebooks.push(this.toJSON());
-    return new Promise((resolve, reject) => {
-      fs.writeFile(
-        path.join(__dirname, "..", "data", "notebooks.json"),
-        JSON.stringify(notebooks),
-        (err) => {
-          if (err) {
-            reject(err);
-          } else {
-            resolve();
-          }
-        }
-      );
-    });
-  }
-
-  static getAll() {
-    return new Promise((resolve, reject) => {
-      fs.readFile(
-        path.join(__dirname, "..", "data", "notebooks.json"),
-        "utf-8",
-        (err, content) => {
-          if (err) {
-            reject(err);
-          } else {
-            resolve(JSON.parse(content));
-          }
-        }
-      );
-    });
-  }
-
-  static async getById(id) {
-    const notebooks = await Notebook.getAll();
-    return notebooks.find((item) => item.id === id);
-  }
-}
-
-module.exports = Notebook;
+module.exports = model("Notebook", notebook);

@@ -7,25 +7,18 @@ class Card {
   static async add(notebook) {
     const card = await Card.fetch();
     const idx = card.notebooks.findIndex((item) => item.id === notebook.id);
-    const candidate = card.notebooks[idx];
 
-    if (candidate) {
-      candidate.count++;
-      card.notebooks[idx] = candidate;
+    if (idx >= 0) {
+      card.notebooks[idx].count++;
     } else {
       notebook.count = 1;
       card.notebooks.push(notebook);
     }
-
     card.price += +notebook.price;
 
     return new Promise((resolve, reject) => {
       fs.writeFile(pathToDb, JSON.stringify(card), (err) => {
-        if (err) {
-          reject(err);
-        } else {
-          resolve();
-        }
+        err ? reject(err) : resolve();
       });
     });
   }
@@ -33,18 +26,13 @@ class Card {
   static async increment(id) {
     const card = await Card.fetch();
     const idx = card.notebooks.findIndex((item) => item.id === id);
-    const notebook = card.notebooks[idx];
 
+    card.price += +card.notebooks[idx].price;
     card.notebooks[idx].count++;
-    card.price += +notebook.price;
 
     return new Promise((resolve, reject) => {
       fs.writeFile(pathToDb, JSON.stringify(card), (err) => {
-        if (err) {
-          reject(err);
-        } else {
-          resolve(card);
-        }
+        err ? reject(err) : resolve(card);
       });
     });
   }
@@ -52,23 +40,18 @@ class Card {
   static async decrement(id) {
     const card = await Card.fetch();
     const idx = card.notebooks.findIndex((item) => item.id === id);
-    const notebook = card.notebooks[idx];
 
-    if (notebook.count === 1) {
+    card.price -= +card.notebooks[idx].price;
+
+    if (card.notebooks[idx].count === 1) {
       card.notebooks = card.notebooks.filter((item) => item.id !== id);
     } else {
       card.notebooks[idx].count--;
     }
 
-    card.price -= +notebook.price;
-
     return new Promise((resolve, reject) => {
       fs.writeFile(pathToDb, JSON.stringify(card), (err) => {
-        if (err) {
-          reject(err);
-        } else {
-          resolve(card);
-        }
+        err ? reject(err) : resolve(card);
       });
     });
   }
@@ -76,18 +59,13 @@ class Card {
   static async remove(id) {
     const card = await Card.fetch();
     const idx = card.notebooks.findIndex((item) => item.id === id);
-    const notebook = card.notebooks[idx];
 
-    card.price -= +notebook.price * card.notebooks[idx].count;
+    card.price -= +card.notebooks[idx].price * card.notebooks[idx].count;
     card.notebooks = card.notebooks.filter((item) => item.id !== id);
 
     return new Promise((resolve, reject) => {
       fs.writeFile(pathToDb, JSON.stringify(card), (err) => {
-        if (err) {
-          reject(err);
-        } else {
-          resolve(card);
-        }
+        err ? reject(err) : resolve(card);
       });
     });
   }
@@ -95,11 +73,7 @@ class Card {
   static async fetch() {
     return new Promise((resolve, reject) => {
       fs.readFile(pathToDb, "utf-8", (err, content) => {
-        if (err) {
-          reject(err);
-        } else {
-          resolve(JSON.parse(content));
-        }
+        err ? reject(err) : resolve(JSON.parse(content));
       });
     });
   }
