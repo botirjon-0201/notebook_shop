@@ -6,7 +6,6 @@ router.get("/", async (req, res) => {
   const notebooks = await Notebook.find()
     .populate("userId", "email name")
     .select("price title img descr");
-  console.log(notebooks);
   res.render("notebooks", { title: "Notebooks", isNotebooks: true, notebooks });
 });
 
