@@ -46,7 +46,7 @@ userSchema.methods.addToCart = function (notebook) {
   return this.save();
 };
 
-userSchema.methods.removeFromCart = function(id) {
+userSchema.methods.removeFromCart = function (id) {
   let items = [...this.cart.items];
   const idx = items.findIndex(
     (item) => item.notebookId.toString() === id.toString()
@@ -57,7 +57,7 @@ userSchema.methods.removeFromCart = function(id) {
   return this.save();
 };
 
-userSchema.methods.increment = function(id) {
+userSchema.methods.increment = function (id) {
   let items = [...this.cart.items];
   const idx = items.findIndex(
     (item) => item.notebookId.toString() === id.toString()
@@ -68,7 +68,7 @@ userSchema.methods.increment = function(id) {
   return this.save();
 };
 
-userSchema.methods.decrement = function(id) {
+userSchema.methods.decrement = function (id) {
   let items = [...this.cart.items];
   const idx = items.findIndex(
     (item) => item.notebookId.toString() === id.toString()
@@ -83,6 +83,11 @@ userSchema.methods.decrement = function(id) {
   }
 
   this.cart = { items };
+  return this.save();
+};
+
+userSchema.methods.cleanCart = function () {
+  this.cart = { items: [] };
   return this.save();
 };
 
