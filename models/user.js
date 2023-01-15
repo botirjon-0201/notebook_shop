@@ -27,7 +27,7 @@ const userSchema = new Schema({
   },
 });
 
-userSchema.methods.addToCart = function(notebook) {
+userSchema.methods.addToCart = function (notebook) {
   let items = [...this.cart.items];
   const idx = items.findIndex(
     (item) => item.notebookId.toString() === notebook._id.toString()
@@ -40,6 +40,46 @@ userSchema.methods.addToCart = function(notebook) {
       notebookId: notebook._id,
       count: 1,
     });
+  }
+
+  this.cart = { items };
+  return this.save();
+};
+
+userSchema.methods.removeFromCart = function(id) {
+  let items = [...this.cart.items];
+  const idx = items.findIndex(
+    (item) => item.notebookId.toString() === id.toString()
+  );
+  items = items.filter((item) => item.notebookId.toString() !== id.toString());
+
+  this.cart = { items };
+  return this.save();
+};
+
+userSchema.methods.increment = function(id) {
+  let items = [...this.cart.items];
+  const idx = items.findIndex(
+    (item) => item.notebookId.toString() === id.toString()
+  );
+  items[idx].count++;
+
+  this.cart = { items };
+  return this.save();
+};
+
+userSchema.methods.decrement = function(id) {
+  let items = [...this.cart.items];
+  const idx = items.findIndex(
+    (item) => item.notebookId.toString() === id.toString()
+  );
+
+  if (items[idx].count === 1) {
+    items = items.filter(
+      (item) => item.notebookId.toString() !== id.toString()
+    );
+  } else {
+    items[idx].count--;
   }
 
   this.cart = { items };

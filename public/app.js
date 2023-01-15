@@ -54,8 +54,8 @@ const toCurrency = (price) => {
 document.querySelectorAll(".price").forEach((c) => {
   c.textContent = toCurrency(c.textContent);
 });
-
 const $card = document.querySelector("#card");
+
 if ($card) {
   $card.addEventListener("click", (e) => {
     if (e.target.classList.contains("js-remove")) {

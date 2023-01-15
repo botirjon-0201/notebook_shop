@@ -1,6 +1,6 @@
 const { Schema, model } = require("mongoose");
 
-const notebook = new Schema({
+const notebookSchema = new Schema({
   title: {
     type: String,
     required: true,
@@ -23,4 +23,12 @@ const notebook = new Schema({
   },
 });
 
-module.exports = model("Notebook", notebook);
+// notebookSchema.method("toClient", function () {
+//   const notebook = this.toObject();
+//   notebook.id = notebook._id;
+//   delete notebook._id;
+
+//   return notebook;
+// });
+
+module.exports = model("Notebook", notebookSchema);

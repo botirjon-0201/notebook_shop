@@ -5,6 +5,7 @@ const router = Router();
 function mapCart(cart) {
   return cart.items.map((item) => ({
     ...item.notebookId._doc,
+    id: item.notebookId.id,
     count: item.count,
   }));
 }
@@ -21,19 +22,37 @@ router.post("/add", async (req, res) => {
   res.redirect("/card");
 });
 
+router.delete("/remove/:id", async (req, res) => {
+  await req.user.removeFromCart(req.params.id);
+  const user = await req.user.populate("cart.items.notebookId");
+  const notebooks = mapCart(user.cart);
+  const cart = {
+    notebooks,
+    price: computePrice(notebooks),
+  };
+  res.status(200).json(cart);
+});
+
 router.post("/inc/:id", async (req, res) => {
-  const card = await Card.increment(req.params.id);
-  res.status(200).send(card);
+  await req.user.increment(req.params.id);
+  const user = await req.user.populate("cart.items.notebookId");
+  const notebooks = mapCart(user.cart);
+  const cart = {
+    notebooks,
+    price: computePrice(notebooks),
+  };
+  res.status(200).json(cart);
 });
 
 router.delete("/dec/:id", async (req, res) => {
-  const card = await Card.decrement(req.params.id);
-  res.status(200).send(card);
-});
-
-router.delete("/remove/:id", async (req, res) => {
-  const card = await Card.remove(req.params.id);
-  res.status(200).send(card);
+  await req.user.decrement(req.params.id);
+  const user = await req.user.populate("cart.items.notebookId");
+  const notebooks = mapCart(user.cart);
+  const cart = {
+    notebooks,
+    price: computePrice(notebooks),
+  };
+  res.status(200).json(cart);
 });
 
 router.get("/", async (req, res) => {
@@ -43,7 +62,7 @@ router.get("/", async (req, res) => {
   res.render("card", {
     title: "Basket",
     isCard: true,
-    notebooks: notebooks,
+    notebooks,
     price: computePrice(notebooks),
   });
 });
