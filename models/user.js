@@ -32,7 +32,6 @@ userSchema.methods.addToCart = function (notebook) {
   const idx = items.findIndex(
     (item) => item.notebookId.toString() === notebook._id.toString()
   );
-
   if (idx >= 0) {
     items[idx].count++;
   } else {
@@ -41,7 +40,6 @@ userSchema.methods.addToCart = function (notebook) {
       count: 1,
     });
   }
-
   this.cart = { items };
   return this.save();
 };
@@ -52,7 +50,6 @@ userSchema.methods.removeFromCart = function (id) {
     (item) => item.notebookId.toString() === id.toString()
   );
   items = items.filter((item) => item.notebookId.toString() !== id.toString());
-
   this.cart = { items };
   return this.save();
 };
@@ -63,7 +60,6 @@ userSchema.methods.increment = function (id) {
     (item) => item.notebookId.toString() === id.toString()
   );
   items[idx].count++;
-
   this.cart = { items };
   return this.save();
 };
@@ -73,7 +69,6 @@ userSchema.methods.decrement = function (id) {
   const idx = items.findIndex(
     (item) => item.notebookId.toString() === id.toString()
   );
-
   if (items[idx].count === 1) {
     items = items.filter(
       (item) => item.notebookId.toString() !== id.toString()
@@ -81,7 +76,6 @@ userSchema.methods.decrement = function (id) {
   } else {
     items[idx].count--;
   }
-
   this.cart = { items };
   return this.save();
 };

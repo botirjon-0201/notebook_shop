@@ -17,54 +17,73 @@ function computePrice(notebooks) {
 }
 
 router.post("/add", async (req, res) => {
-  const notebook = await Notebook.findById(req.body.id);
-  await req.user.addToCart(notebook);
-  res.redirect("/card");
+  try {
+    const notebook = await Notebook.findById(req.body.id);
+    await req.user.addToCart(notebook);
+    res.redirect("/card");
+  } catch (error) {
+    console.log(error);
+  }
 });
 
 router.delete("/remove/:id", async (req, res) => {
-  await req.user.removeFromCart(req.params.id);
-  const user = await req.user.populate("cart.items.notebookId");
-  const notebooks = mapCart(user.cart);
-  const cart = {
-    notebooks,
-    price: computePrice(notebooks),
-  };
-  res.status(200).json(cart);
+  try {
+    await req.user.removeFromCart(req.params.id);
+    const user = await req.user.populate("cart.items.notebookId");
+    const notebooks = mapCart(user.cart);
+    const cart = {
+      notebooks,
+      price: computePrice(notebooks),
+    };
+    res.status(200).json(cart);
+  } catch (error) {
+    console.log(error);
+  }
 });
 
 router.post("/inc/:id", async (req, res) => {
-  await req.user.increment(req.params.id);
-  const user = await req.user.populate("cart.items.notebookId");
-  const notebooks = mapCart(user.cart);
-  const cart = {
-    notebooks,
-    price: computePrice(notebooks),
-  };
-  res.status(200).json(cart);
+  try {
+    await req.user.increment(req.params.id);
+    const user = await req.user.populate("cart.items.notebookId");
+    const notebooks = mapCart(user.cart);
+    const cart = {
+      notebooks,
+      price: computePrice(notebooks),
+    };
+    res.status(200).json(cart);
+  } catch (error) {
+    console.log(error);
+  }
 });
 
 router.delete("/dec/:id", async (req, res) => {
-  await req.user.decrement(req.params.id);
-  const user = await req.user.populate("cart.items.notebookId");
-  const notebooks = mapCart(user.cart);
-  const cart = {
-    notebooks,
-    price: computePrice(notebooks),
-  };
-  res.status(200).json(cart);
+  try {
+    await req.user.decrement(req.params.id);
+    const user = await req.user.populate("cart.items.notebookId");
+    const notebooks = mapCart(user.cart);
+    const cart = {
+      notebooks,
+      price: computePrice(notebooks),
+    };
+    res.status(200).json(cart);
+  } catch (error) {
+    console.log(error);
+  }
 });
 
 router.get("/", async (req, res) => {
-  const user = await req.user.populate("cart.items.notebookId");
-  const notebooks = mapCart(user.cart);
-
-  res.render("card", {
-    title: "Basket",
-    isCard: true,
-    notebooks,
-    price: computePrice(notebooks),
-  });
+  try {
+    const user = await req.user.populate("cart.items.notebookId");
+    const notebooks = mapCart(user.cart);
+    res.render("card", {
+      title: "Basket",
+      isCard: true,
+      notebooks,
+      price: computePrice(notebooks),
+    });
+  } catch (error) {
+    console.log(error);
+  }
 });
 
 module.exports = router;

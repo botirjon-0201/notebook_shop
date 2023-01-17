@@ -3,26 +3,43 @@ const Notebook = require("../models/notebook");
 const router = Router();
 
 router.get("/", async (req, res) => {
-  const notebooks = await Notebook.find()
-    .populate("userId", "email name")
-    .select("price title img descr");
-  res.render("notebooks", { title: "Notebooks", isNotebooks: true, notebooks });
+  try {
+    const notebooks = await Notebook.find()
+      .populate("userId", "email name")
+      .select("price title img descr");
+    res.render("notebooks", {
+      title: "Notebooks",
+      isNotebooks: true,
+      notebooks,
+    });
+  } catch (error) {
+    console.log(error);
+  }
 });
 
 router.get("/:id/edit", async (req, res) => {
   if (!req.query.allow) {
     return res.redirect("/");
+  } else {
+    try {
+      const notebook = await Notebook.findById(req.params.id);
+      res.render("notebook-edit", {
+        title: `Edit ${notebook.title}`,
+        notebook,
+      });
+    } catch (error) {
+      console.log(error);
+    }
   }
-  const notebook = await Notebook.findById(req.params.id);
-  res.render("notebook-edit", {
-    title: `Edit ${notebook.title}`,
-    notebook,
-  });
 });
 
 router.post("/edit", async (req, res) => {
-  await Notebook.findByIdAndUpdate(req.body.id, req.body);
-  res.redirect("/notebooks");
+  try {
+    await Notebook.findByIdAndUpdate(req.body.id, req.body);
+    res.redirect("/notebooks");
+  } catch (error) {
+    console.log(error);
+  }
 });
 
 router.post("/remove", async (req, res) => {
@@ -35,12 +52,16 @@ router.post("/remove", async (req, res) => {
 });
 
 router.get("/:id", async (req, res) => {
-  const notebook = await Notebook.findById(req.params.id);
-  res.render("notebook", {
-    layout: "detail",
-    title: `Notebook ${notebook.title}`,
-    notebook,
-  });
+  try {
+    const notebook = await Notebook.findById(req.params.id);
+    res.render("notebook", {
+      layout: "detail",
+      title: `Notebook ${notebook.title}`,
+      notebook,
+    });
+  } catch (error) {
+    console.log(error);
+  }
 });
 
 module.exports = router;
