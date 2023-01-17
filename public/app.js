@@ -49,8 +49,22 @@ const toCurrency = (price) => {
     style: "currency",
   }).format(price);
 };
+const toDate = (date) => {
+  return new Intl.DateTimeFormat("en-US", {
+    day: "2-digit",
+    month: "long",
+    year: "numeric",
+    hour: "2-digit",
+    minute: "2-digit",
+    second: "2-digit",
+  }).format(new Data(date));
+};
 document.querySelectorAll(".price").forEach((c) => {
   c.textContent = toCurrency(c.textContent);
+});
+document.querySelectorAll(".date").forEach((s) => {
+  console.log(s.textContent);
+  s.textContent = toDate(s.textContent);
 });
 const $card = document.querySelector("#card");
 
@@ -119,3 +133,5 @@ if ($card) {
     }
   });
 }
+
+M.Tabs.init(document.querySelectorAll(".tabs"));
