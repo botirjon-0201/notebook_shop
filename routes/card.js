@@ -1,5 +1,6 @@
 const { Router } = require("express");
 const Notebook = require("../models/notebook");
+const authMiddleware = require("../middlewares/auth");
 const router = Router();
 
 function mapCart(cart) {
@@ -16,7 +17,7 @@ function computePrice(notebooks) {
   }, 0);
 }
 
-router.post("/add", async (req, res) => {
+router.post("/add", authMiddleware, async (req, res) => {
   try {
     const notebook = await Notebook.findById(req.body.id);
     await req.user.addToCart(notebook);
@@ -26,7 +27,7 @@ router.post("/add", async (req, res) => {
   }
 });
 
-router.delete("/remove/:id", async (req, res) => {
+router.delete("/remove/:id", authMiddleware, async (req, res) => {
   try {
     await req.user.removeFromCart(req.params.id);
     const user = await req.user.populate("cart.items.notebookId");
@@ -41,7 +42,7 @@ router.delete("/remove/:id", async (req, res) => {
   }
 });
 
-router.post("/inc/:id", async (req, res) => {
+router.post("/inc/:id", authMiddleware, async (req, res) => {
   try {
     await req.user.increment(req.params.id);
     const user = await req.user.populate("cart.items.notebookId");
@@ -56,7 +57,7 @@ router.post("/inc/:id", async (req, res) => {
   }
 });
 
-router.delete("/dec/:id", async (req, res) => {
+router.delete("/dec/:id", authMiddleware, async (req, res) => {
   try {
     await req.user.decrement(req.params.id);
     const user = await req.user.populate("cart.items.notebookId");
@@ -71,7 +72,7 @@ router.delete("/dec/:id", async (req, res) => {
   }
 });
 
-router.get("/", async (req, res) => {
+router.get("/", authMiddleware, async (req, res) => {
   try {
     const user = await req.user.populate("cart.items.notebookId");
     const notebooks = mapCart(user.cart);

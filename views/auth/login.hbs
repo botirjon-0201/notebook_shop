@@ -32,6 +32,11 @@
     <h4>Create Account</h4>
     <form action="/auth/register" method="POST" class="f_control">
       <div class="input-field">
+        <input id="name" name="name" type="text" class="validate" required />
+        <label for="name">Enter Your Name</label>
+        <span class="helper-text" data-error="Enter Your Name"></span>
+      </div>
+      <div class="input-field">
         <input
           id="remail"
           name="email"

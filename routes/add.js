@@ -1,8 +1,9 @@
 const { Router } = require("express");
 const Notebook = require("../models/notebook");
+const authMiddleware = require("../middlewares/auth");
 const router = Router();
 
-router.get("/", (req, res) => {
+router.get("/", authMiddleware, (req, res) => {
   try {
     res.render("add", { title: "Add Notebook", isAdd: true });
   } catch (error) {
@@ -10,7 +11,7 @@ router.get("/", (req, res) => {
   }
 });
 
-router.post("/", async (req, res) => {
+router.post("/", authMiddleware, async (req, res) => {
   try {
     const notebook = new Notebook({
       title: req.body.title,

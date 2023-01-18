@@ -16,6 +16,7 @@ const ordersRoutes = require("./routes/orders");
 const authRoutes = require("./routes/auth");
 const User = require("./models/user");
 const varMiddleware = require("./middlewares/var");
+const userMiddleware = require("./middlewares/user");
 
 const MONGODB_URI =
   "mongodb+srv://Botirjon:4pNNd6dLX0qb8JFP@cluster0.a2mle2z.mongodb.net/shop_notebooks";
@@ -45,6 +46,7 @@ app.use(
     store,
   })
 );
+app.use(userMiddleware);
 app.use(varMiddleware);
 
 app.use("/", homeRoutes);
