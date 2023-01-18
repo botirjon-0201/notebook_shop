@@ -11,6 +11,7 @@ router.get("/", async (req, res) => {
     res.render("notebooks", {
       title: "Notebooks",
       isNotebooks: true,
+      userId: req.user ? req.user._id.toString() : null,
       notebooks,
     });
   } catch (error) {
@@ -24,6 +25,9 @@ router.get("/:id/edit", authMiddleware, async (req, res) => {
   } else {
     try {
       const notebook = await Notebook.findById(req.params.id);
+      if (notebook.userId.toString() !== req.user._id.toString()) {
+        return res.redirect("/notebooks");
+      }
       res.render("notebook-edit", {
         title: `Edit ${notebook.title}`,
         notebook,

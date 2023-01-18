@@ -1,5 +1,6 @@
 const express = require("express");
 const app = express();
+const flash = require("connect-flash");
 const mongoose = require("mongoose");
 const Handlebars = require("handlebars");
 const {
@@ -24,6 +25,7 @@ const MONGODB_URI =
 const hbs = exphbs.create({
   defaultLayout: "main",
   extname: "hbs",
+  helpers: require("./utils"),
   handlebars: allowInsecurePrototypeAccess(Handlebars),
 });
 
@@ -46,6 +48,7 @@ app.use(
     store,
   })
 );
+app.use(flash());
 app.use(userMiddleware);
 app.use(varMiddleware);
 
