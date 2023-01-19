@@ -135,3 +135,6 @@ if ($card) {
 }
 
 M.Tabs.init(document.querySelectorAll(".tabs"));
+
+let panel = document.querySelector("#panel");
+panel.classList.add("panel");
