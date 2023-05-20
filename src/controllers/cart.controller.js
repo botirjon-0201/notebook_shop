@@ -1,7 +1,4 @@
-const { Router } = require("express");
 const Notebook = require("../models/notebook");
-const authMiddleware = require("../middlewares/auth");
-const router = Router();
 
 function mapCart(cart) {
   return cart.items.map((item) => ({
@@ -17,7 +14,7 @@ function computePrice(notebooks) {
   }, 0);
 }
 
-router.post("/add", authMiddleware, async (req, res) => {
+const addToCart = async (req, res) => {
   try {
     const notebook = await Notebook.findById(req.body.id);
     await req.user.addToCart(notebook);
@@ -25,9 +22,9 @@ router.post("/add", authMiddleware, async (req, res) => {
   } catch (error) {
     console.log(error);
   }
-});
+};
 
-router.delete("/remove/:id", authMiddleware, async (req, res) => {
+const deleteFromCart = async (req, res) => {
   try {
     await req.user.removeFromCart(req.params.id);
     const user = await req.user.populate("cart.items.notebookId");
@@ -40,9 +37,9 @@ router.delete("/remove/:id", authMiddleware, async (req, res) => {
   } catch (error) {
     console.log(error);
   }
-});
+};
 
-router.post("/inc/:id", authMiddleware, async (req, res) => {
+const incrementCart = async (req, res) => {
   try {
     await req.user.increment(req.params.id);
     const user = await req.user.populate("cart.items.notebookId");
@@ -55,9 +52,9 @@ router.post("/inc/:id", authMiddleware, async (req, res) => {
   } catch (error) {
     console.log(error);
   }
-});
+};
 
-router.delete("/dec/:id", authMiddleware, async (req, res) => {
+const decrementCart = async (req, res) => {
   try {
     await req.user.decrement(req.params.id);
     const user = await req.user.populate("cart.items.notebookId");
@@ -70,9 +67,9 @@ router.delete("/dec/:id", authMiddleware, async (req, res) => {
   } catch (error) {
     console.log(error);
   }
-});
+};
 
-router.get("/", authMiddleware, async (req, res) => {
+const getAllCarts = async (req, res) => {
   try {
     const user = await req.user.populate("cart.items.notebookId");
     const notebooks = mapCart(user.cart);
@@ -85,6 +82,12 @@ router.get("/", authMiddleware, async (req, res) => {
   } catch (error) {
     console.log(error);
   }
-});
+};
 
-module.exports = router;
+module.exports = {
+  addToCart,
+  deleteFromCart,
+  incrementCart,
+  decrementCart,
+  getAllCarts,
+};

@@ -1,17 +1,14 @@
-const { Router } = require("express");
-const router = Router();
-const authMiddleware = require("../middlewares/auth");
 const User = require("../models/user");
 
-router.get("/", authMiddleware, async (req, res) => {
+const getProfile = async (req, res) => {
   res.render("profile", {
     title: "Profile",
     isProfile: true,
     user: req.user.toObject(),
   });
-});
+};
 
-router.post("/", authMiddleware, async (req, res) => {
+const editProfile = async (req, res) => {
   try {
     const user = await User.findById(req.user._id);
     const toChange = {
@@ -27,6 +24,6 @@ router.post("/", authMiddleware, async (req, res) => {
   } catch (error) {
     console.log(error);
   }
-});
+};
 
-module.exports = router;
+module.exports = { getProfile, editProfile };

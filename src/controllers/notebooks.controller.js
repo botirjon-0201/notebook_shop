@@ -1,9 +1,6 @@
-const { Router } = require("express");
 const Notebook = require("../models/notebook");
-const authMiddleware = require("../middlewares/auth");
-const router = Router();
 
-router.get("/", async (req, res) => {
+const getNotebooks = async (req, res) => {
   try {
     const notebooks = await Notebook.find()
       .populate("userId", "email name")
@@ -17,9 +14,9 @@ router.get("/", async (req, res) => {
   } catch (error) {
     console.log(error);
   }
-});
+};
 
-router.get("/:id/edit", authMiddleware, async (req, res) => {
+const editByIdNotebook = async (req, res) => {
   if (!req.query.allow) {
     return res.redirect("/");
   } else {
@@ -36,27 +33,27 @@ router.get("/:id/edit", authMiddleware, async (req, res) => {
       console.log(error);
     }
   }
-});
+};
 
-router.post("/edit", authMiddleware, async (req, res) => {
+const editNotebook = async (req, res) => {
   try {
     await Notebook.findByIdAndUpdate(req.body.id, req.body);
     res.redirect("/notebooks");
   } catch (error) {
     console.log(error);
   }
-});
+};
 
-router.post("/remove", authMiddleware, async (req, res) => {
+const deleteNotebook = async (req, res) => {
   try {
     await Notebook.deleteOne({ _id: req.body.id });
     res.redirect("/notebooks");
   } catch (error) {
     console.log(error);
   }
-});
+};
 
-router.get("/:id", async (req, res) => {
+const getNotebook = async (req, res) => {
   try {
     const notebook = await Notebook.findById(req.params.id);
     res.render("notebook", {
@@ -67,6 +64,12 @@ router.get("/:id", async (req, res) => {
   } catch (error) {
     console.log(error);
   }
-});
+};
 
-module.exports = router;
+module.exports = {
+  getNotebooks,
+  getNotebook,
+  editNotebook,
+  editByIdNotebook,
+  deleteNotebook,
+};

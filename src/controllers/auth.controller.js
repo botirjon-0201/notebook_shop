@@ -1,26 +1,39 @@
-const { Router } = require("express");
 const bcrypt = require("bcryptjs");
 const { validationResult } = require("express-validator");
-const { registerValidators } = require("../utils/validator");
 const User = require("../models/user");
-const router = Router();
 
-router.get("/login", async (req, res) => {
+const getLogin = async (req, res) => {
   res.render("auth/login", {
     title: "Register",
     isLogin: true,
     registerError: req.flash("registerError"),
     loginError: req.flash("loginError"),
   });
-});
+};
 
-router.get("/logout", async (req, res) => {
-  req.session.destroy(() => {
+const register = async (req, res) => {
+  try {
+    const { email, password, name, confirm } = req.body;
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      req.flash("registerError", errors.array()[0].msg);
+      return res.status(422).redirect("/auth/login#register");
+    }
+    const hashPass = await bcrypt.hash(password, 10);
+    const user = new User({
+      name,
+      email,
+      password: hashPass,
+      cart: { items: [] },
+    });
+    await user.save();
     res.redirect("/auth/login#login");
-  });
-});
+  } catch (error) {
+    console.log(error);
+  }
+};
 
-router.post("/login", async (req, res) => {
+const login = async (req, res) => {
   try {
     const { email, password } = req.body;
     const candidate = await User.findOne({ email });
@@ -44,28 +57,12 @@ router.post("/login", async (req, res) => {
   } catch (error) {
     console.log(error);
   }
-});
+};
 
-router.post("/register", registerValidators, async (req, res) => {
-  try {
-    const { email, password, name, confirm } = req.body;
-    const errors = validationResult(req);
-    if (!errors.isEmpty()) {
-      req.flash("registerError", errors.array()[0].msg);
-      return res.status(422).redirect("/auth/login#register");
-    }
-    const hashPass = await bcrypt.hash(password, 10);
-    const user = new User({
-      name,
-      email,
-      password: hashPass,
-      cart: { items: [] },
-    });
-    await user.save();
+const logout = async (req, res) => {
+  req.session.destroy(() => {
     res.redirect("/auth/login#login");
-  } catch (error) {
-    console.log(error);
-  }
-});
+  });
+};
 
-module.exports = router;
+module.exports = { getLogin, register, login, logout };

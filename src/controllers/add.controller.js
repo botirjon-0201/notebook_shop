@@ -1,19 +1,15 @@
-const { Router } = require("express");
 const { validationResult } = require("express-validator");
 const Notebook = require("../models/notebook");
-const authMiddleware = require("../middlewares/auth");
-const { notebookValidators } = require("../utils/validator");
-const router = Router();
 
-router.get("/", authMiddleware, (req, res) => {
+const getAdd = (req, res) => {
   try {
     res.render("add", { title: "Add Notebook", isAdd: true });
   } catch (error) {
     console.log(error);
   }
-});
+};
 
-router.post("/", authMiddleware, notebookValidators, async (req, res) => {
+const postAdd = async (req, res) => {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
     return res.status(422).render("add", {
@@ -41,6 +37,6 @@ router.post("/", authMiddleware, notebookValidators, async (req, res) => {
   } catch (error) {
     console.log(error);
   }
-});
+};
 
-module.exports = router;
+module.exports = { getAdd, postAdd };

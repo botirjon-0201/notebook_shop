@@ -4,8 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "node index.js",
-    "dev": "nodemon index.js"
+    "start": "node src/index.js",
+    "dev": "nodemon src/index.js"
   },
   "repository": {
     "type": "git",
@@ -25,6 +25,7 @@
     "connect-flash": "^0.1.1",
     "connect-mongodb-session": "^3.1.0",
     "csurf": "^1.11.0",
+    "dotenv": "^16.0.3",
     "express": "^4.17.1",
     "express-handlebars": "^5.3.3",
     "express-hbs": "^2.4.0",
